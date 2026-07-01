@@ -14,7 +14,7 @@ gem "bcrypt", "~> 3.1.7"
 gem "jwt", "~> 2.5"
 
 # CORS para comunicación con React
-gem "rack-cors", "~> 2.0"
+gem "rack-cors", "~> 3.0"
 
 # Serializadores
 gem "active_model_serializers", "~> 0.10.13"
