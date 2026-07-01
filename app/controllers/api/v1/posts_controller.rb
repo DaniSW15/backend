@@ -6,6 +6,8 @@ module Api
   module V1
     class PostsController < ApplicationController
       JSONPLACEHOLDER_URL = "https://jsonplaceholder.typicode.com/posts".freeze
+      JSONPLACEHOLDER_HOST = "jsonplaceholder.typicode.com".freeze
+      JSONPLACEHOLDER_PORT = 443
 
       # GET /v1/posts
       def index
@@ -32,8 +34,9 @@ module Api
           return
         end
 
-        uri = URI("#{JSONPLACEHOLDER_URL}/#{id}")
-        response = Net::HTTP.get_response(uri)
+        response = Net::HTTP.start(JSONPLACEHOLDER_HOST, JSONPLACEHOLDER_PORT, use_ssl: true) do |http|
+          http.get("/posts/#{id}")
+        end
 
         if response.is_a?(Net::HTTPSuccess)
           post = JSON.parse(response.body)
@@ -47,7 +50,6 @@ module Api
 
       # POST /v1/posts
       def create
-        uri = URI(JSONPLACEHOLDER_URL)
         header = { "Content-Type" => "application/json; charset=UTF-8" }
 
         # El servicio espera title, body y userId
@@ -57,13 +59,11 @@ module Api
           userId: current_user.id
         }
 
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-
-        request = Net::HTTP::Post.new(uri.path, header)
-        request.body = post_data.to_json
-
-        response = http.request(request)
+        response = Net::HTTP.start(JSONPLACEHOLDER_HOST, JSONPLACEHOLDER_PORT, use_ssl: true) do |http|
+          request = Net::HTTP::Post.new("/posts", header)
+          request.body = post_data.to_json
+          http.request(request)
+        end
 
         if response.code.to_i == 201
           created_post = JSON.parse(response.body)
@@ -92,16 +92,13 @@ module Api
           return
         end
 
-        uri = URI("#{JSONPLACEHOLDER_URL}/#{id}")
         header = { "Content-Type" => "application/json; charset=UTF-8" }
 
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-
-        request = Net::HTTP::Put.new(uri.path, header)
-        request.body = post_data.to_json
-
-        response = http.request(request)
+        response = Net::HTTP.start(JSONPLACEHOLDER_HOST, JSONPLACEHOLDER_PORT, use_ssl: true) do |http|
+          request = Net::HTTP::Put.new("/posts/#{id}", header)
+          request.body = post_data.to_json
+          http.request(request)
+        end
 
         if response.is_a?(Net::HTTPSuccess)
           updated_post = JSON.parse(response.body)
@@ -123,12 +120,10 @@ module Api
           return
         end
 
-        uri = URI("#{JSONPLACEHOLDER_URL}/#{id}")
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = true
-
-        request = Net::HTTP::Delete.new(uri.path)
-        response = http.request(request)
+        response = Net::HTTP.start(JSONPLACEHOLDER_HOST, JSONPLACEHOLDER_PORT, use_ssl: true) do |http|
+          request = Net::HTTP::Delete.new("/posts/#{id}")
+          http.request(request)
+        end
 
         if response.is_a?(Net::HTTPSuccess)
           render json: { message: "Publicación eliminada exitosamente" }, status: :ok
