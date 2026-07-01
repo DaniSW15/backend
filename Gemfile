@@ -10,17 +10,17 @@ gem "puma", ">= 5.0"
 # gem "jbuilder"
 
 # Autenticación
-gem 'bcrypt', '~> 3.1.7'
-gem 'jwt', '~> 2.5'
+gem "bcrypt", "~> 3.1.7"
+gem "jwt", "~> 2.5"
 
 # CORS para comunicación con React
-gem 'rack-cors', '~> 2.0'
+gem "rack-cors", "~> 2.0"
 
 # Serializadores
-gem 'active_model_serializers', '~> 0.10.13'
+gem "active_model_serializers", "~> 0.10.13"
 
 # Permisos y roles
-gem 'cancancan', '~> 3.5'
+gem "cancancan", "~> 3.5"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

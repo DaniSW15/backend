@@ -3,6 +3,6 @@ class CollaboratorSerializer < ActiveModel::Serializer
              :social_security_number, :start_date, :contract_type,
              :department, :position, :daily_salary, :salary,
              :entity_key, :state, :created_at, :updated_at
-  
+
   belongs_to :user
 end
